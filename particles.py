@@ -1,47 +1,33 @@
 import pygame
 from pygame.color import THECOLORS
+from pygame import Rect
 
-global Surface
+import planes
+from planes import Display
 
-
-
-
-
-class Window:
-  def __init__(self):
-    surface = self.surface = pygame.display.set_mode((0,0), pygame.RESIZABLE)
-    background = self.background = pygame.Surface(surface.get_size())
-    background.convert()
-    
 
 
 
 class Particles:
 
+  #Variables
+  framerate_limit = 400 
+  time_s = 0.0
+
+
+
   #init the particle
   def __init__(self):
+      try:
+        self.rootPlane = Display()
+      except:
+        print "Problem with rootPlane"
+
       self.widgets = []
-      self.particlesCount = 0
 
-
-      # xPos = 0
-      # yPos = 0
-
-      #need to get the pointer to the surface
-      drawing_surface = pygame.display.get_surface()
-
-      drawing_surface.fill((0,0,150))
-
-
+      #clock to track time between frames
+      self.myclock = pygame.time.Clock()  
      
-      pygame.display.flip()
-
-
-      # for widget in range(100):
-      #   xPos += 10
-      #   yPos += 10
-      #   pygame.draw.circle(Surface.surface, [0,0,100], (xPos,yPos), 50) 
-
 
 
 
@@ -50,8 +36,22 @@ class Particles:
     drawing_surface.fill((0,0,0))
     pygame.display.flip()
 
-     
+    
 
+
+  #Fix when you need time   
+  def time(self):
+
+
+    #VerboseComment(VC):
+    #myclock.tick() computes how many milliseconds have passed since the last frame
+    #followed by a conversion from millisecond into seconds
+    dx_s = float(self.myclock.tick(framerate_limit) * 1e-3)
+
+    #time since initialization
+    time_s += dx_s
+
+    return time_s
 
 
   def update_SpeedandPosition(self):
@@ -77,5 +77,3 @@ class Particles:
       pass
 
 
-
-Surface = Window()

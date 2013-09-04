@@ -62,22 +62,9 @@ class UserEvents:
         elif(event.type == pygame.MOUSEBUTTONUP):
           pass
 
-
         
         return
 
 
-         # except:
-         #   print "global exception"
-         #   e = sys.exc_info()
-         #   print e[0]
-         #   print e[1]
-
-         # except:
-         #    print "local exception"
-         #    e = sys.exc_info()
-         #    print e[0]
-         #    print e[1]
-                  
 
 
