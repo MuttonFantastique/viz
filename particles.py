@@ -3,6 +3,10 @@ from pygame.color import THECOLORS
 
 global Surface
 
+
+
+
+
 class Window:
   def __init__(self):
     surface = self.surface = pygame.display.set_mode((0,0), pygame.RESIZABLE)
@@ -26,7 +30,7 @@ class Particles:
       #need to get the pointer to the surface
       drawing_surface = pygame.display.get_surface()
 
-      drawing_surface.fill((0,0,0))
+      drawing_surface.fill((0,0,150))
 
 
      
@@ -41,16 +45,12 @@ class Particles:
 
 
 
-
   def erase_screen(self):
     drawing_surface = pygame.display.get_surface()
-    drawing_surface.fill((250,0,0))
+    drawing_surface.fill((0,0,0))
     pygame.display.flip()
 
      
-         
-
-
 
 
 

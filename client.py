@@ -1,6 +1,4 @@
 #! /usr/bin/env python
-
-
 #
 # viz-1.0
 # GNU
@@ -39,11 +37,18 @@ sys.path.append('/home/blackpanther/Desktop/sdlHacking/working/')
 
 
 
+
+
+
+
+
+
+
 # zZz
 def main():
 
-  #give me a few global classes to play with
-  global Surface, EventControl, Particle_Container, Window
+  #give me a few global classes to play with...guess I don't need them
+  #global Surface, EventControl, Particle_Container, Window
 
 
   #intialize pygame module's
@@ -64,6 +69,7 @@ def main():
 
 
 
+
 #
 # Connect to server and get data about network
 #
@@ -74,66 +80,68 @@ def main():
     sys.exit()
 
 
-  print "about to connect"
-  try:
-    s.connect(('localhost', 9879))
-  except socket.error, msg:
-    print "Socket Error number: " + str(msg[0]) + "\nError Message: " + msg[1]
-
-
-
 
   # ex: s.send('string')
 
-  
-  
+  try:
+    s.connect(('localhost', 9879))
 
-  on = True
-  
-  #Program Loop
-  while(on):
-    print "Entering program loop"
+    client = True
+    #Main Program Loop
+    while(client):
 
-    #print "pulling data"
-    #data = s.recv(6500)
+        data = s.recv(16) #2^16 or 0xFF bits
 
-    #VerboseComment(VC): myclock.tick() computes how many milliseconds have passed since the last frame
-    #followed by a conversion from millisecond into seconds
-    dx_s = float(myclock.tick(framerate_limit) * 1e-3)
+        if data:
+          print data
+          data = 0
 
 
+        #VerboseComment(VC): myclock.tick() computes how many milliseconds have passed since the last frame
+        #followed by a conversion from millisecond into seconds
+        dx_s = float(myclock.tick(framerate_limit) * 1e-3)
 
-    #gets user input which returns a string signal if an event is triggered 
-    eventReturn = EventControl.pollingInput()
 
 
-    #conditionals for eventReturn sig
-    if( eventReturn == 'quit'):
-      s.close()
-      pygame.exit()
-      sys.close()
-
-    elif( eventReturn == 'reload'):
-      from particles import *
-      Particle_Container = Particles()
-
-    elif eventReturn == 'erase':
-      Particle_Container.erase_screen() 
-
+        #gets user input which returns a string signal if an event is triggered 
+        eventReturn = EventControl.pollingInput()
     
 
-    #these 3 functions do the heavy lifting of getting objects drawn on the screen
-    Particle_Container.update_SpeedandPosition()
-    Particle_Container.collision_detection()
-    Particle_Container.drawParticle()
+        #conditionals for eventReturn sig
+        if( eventReturn == 'quit'):
+          s.close()
+          pygame.exit()
+          sys.close()
+
+        elif( eventReturn == 'reload'):
+          from particles import *
+          Particle_Container = Particles()
+
+        elif eventReturn == 'erase':
+          Particle_Container.erase_screen() 
+
+        elif eventReturn == 'shutdown':
+          s.send('shutdown')
+
+        
+
+        #these 3 functions do the heavy lifting of getting objects drawn on the screen
+        Particle_Container.update_SpeedandPosition()
+        Particle_Container.collision_detection()
+        Particle_Container.drawParticle()
 
 
-    #time since initialization
-    time_s += dx_s
+        #time since initialization
+        time_s += dx_s
 
 
-    #update the screen
-    pygame.display.flip()
+        #update the screen
+        pygame.display.flip()
+     
+
+
+  except: #exits if no connection made
+    "exception raised..."
 
 
 if __name__ == '__main__':
