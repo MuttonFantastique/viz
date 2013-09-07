@@ -11,8 +11,7 @@ import os
 
 #import pygame environment
 import pygame
-from pygame.locals import *
-from pygame.color import THECOLORS
+
 
 #usage time.sleep(5.5) //seconds
 import time
@@ -24,6 +23,7 @@ from particles import *
 # networking
 import socket
 
+#implicit import pycallgraph
 
 #Still necessary?
 #TODO: setup.py
@@ -36,7 +36,10 @@ def main():
 
   #Major Classes
   EventControl = UserEvents()
-  Particle_Container = Particles()
+  #Gui_Env = GUI((400,400), fullscreen = False)
+  Gui_Env = GUI((0,0))
+  Gui_Env.grab = True
+  Gui_Env.image.fill((0,128,0))
 
 
 
@@ -71,6 +74,7 @@ def main():
 
         #gets user input which returns a string signal for triggered events 
         eventReturn = EventControl.pollingInput()
+        
     
         if( eventReturn == 'quit'):
           s.close()
@@ -78,11 +82,16 @@ def main():
           sys.close()
 
         elif( eventReturn == 'reload'):
-          from particles import *
-          Particle_Container = Particles()
+            
+            from particles import *
+            Gui_Env = GUI((0,0))
+            Gui_Env.grab = True
+            Gui_Env.image.fill((0, 128, 0))
+          
+          
 
         elif eventReturn == 'erase':
-          Particle_Container.erase_screen() 
+          Gui_Env.erase_screen() 
 
 
 
@@ -91,12 +100,34 @@ def main():
         elif eventReturn == 'shutdown':
           s.send('shutdown')
 
-        
+
+
+        elif eventReturn == 'sample':
+            import pycallgraph
+            pycallgraph.start_trace()
+
+              # TODO:
+              # import cProfile
+              # cProfile.run('foo()')
+
+
+        elif eventReturn == 'stopsample':
+          pycallgraph.make_dot_graph('images/sample.png')
+
+
+        Gui_Env.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+        Gui_Env.update()
+        Gui_Env.render()
+
+        pygame.display.flip()
+
+  
 
         #these 3 functions do the heavy lifting of getting objects drawn on the screen
-        Particle_Container.update_SpeedandPosition()
-        Particle_Container.collision_detection()
-        Particle_Container.drawParticle()
+        Gui_Env.update_SpeedandPosition()
+        Gui_Env.collision_detection()
+        Gui_Env.drawParticle()
+
 
 
         

@@ -7,8 +7,6 @@ import sys
 
 
 
-
-
 class UserEvents:
 
   printEvent = True
@@ -50,6 +48,12 @@ class UserEvents:
 
           elif(event.key == K_s):
             return 'shutdown'
+
+          elif(event.key == K_z):
+            return 'sample'
+
+          elif(event.key == K_x):
+            return 'stopsample'
 
 
 

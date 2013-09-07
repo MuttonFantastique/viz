@@ -22,7 +22,12 @@ class Child_Fork():
   def __init__(self, connection, peername):
     self.connection = connection
     self.peername = peername
-    self.sendDataToClient()
+
+
+
+
+    #Soon...
+    #self.sendDataToClient()
 
 
 
