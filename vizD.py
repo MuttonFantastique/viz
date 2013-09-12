@@ -8,6 +8,12 @@ import sys
 from scapy.all import *
 
 
+#remove for production#
+sys.dont_write_bytecode = True
+
+
+
+
     #TODO:
         # if fork == 0 //child
         # encrypt the connection and data

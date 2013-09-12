@@ -1,4 +1,60 @@
 
+#########profileing#######
+
+# import cProfile
+# cProfile.run('foo()')
+
+#timer code snippet
+
+# import timeit
+# timeit.Timer('for i in xrange(10): oct(i)').timeit()
+
+# from timeit import Timer
+# t = Timer('func()','from foo import func')
+# t.repeat, t.timeit()
+
+
+
+
+########errors########
+
+  # try:
+
+  # except:
+  #   (type, value, tb) = sys.exc_info()
+  #    print "%s" % value.message
+
+
+
+
+####pycallgraph####
+
+
+# import pycallgraph
+# pycallgraph.start_trace()
+
+# pycallgraph.make_dot_graph('test.png')
+
+####Turn off *.pyc if your untrusting 
+#sys.dont_write_bytecode = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # except:
 #   print "global exception"
 #   e = sys.exc_info()
@@ -10,6 +66,28 @@
 #    e = sys.exc_info()
 #    print e[0]
 #    print e[1]
+
+# except Exception,e:
+#   print str(e)
+
+
+# >>> class MyError(Exception):
+# ...     def __init__(self, value):
+# ...         self.value = value
+# ...     def __str__(self):
+# ...         return repr(self.value)
+# ...
+# >>> try:
+# ...     raise MyError(2*2)
+# ... except MyError as e:
+# ...     print 'My exception occurred, value:', e.value
+# ...
+# My exception occurred, value: 4
+# >>> raise MyError('oops!')
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in ?
+# __main__.MyError: 'oops!'
+
                   
 
 
@@ -21,11 +99,11 @@
 #     background.convert()
   
 
-     import pip
-      from subprocess import call
+#  import pip
+#   from subprocess import call
 
-    for dist in pip.get_installed_distributions():
-      call("pip install --upgrade " + dist.project_name, shell=True)
+# for dist in pip.get_installed_distributions():
+#   call("pip install --upgrade " + dist.project_name, shell=True)
 
 
 
@@ -83,3 +161,26 @@
 ##### Check user input example
 #if not isinstance( <instance>, <instance>):
 # raise ValueError() //use raise to throw exception
+
+
+
+
+# Add current and parent directory. One of them is supposed to contain the
+# planes package.
+#
+  # sys.path.append("../")
+  # sys.path.append("./")
+
+
+
+
+  # assert – base assert allowing you to write your own assertions
+  # assertEqual(a, b) – check a and b are equal
+  # assertNotEqual(a, b) – check a and b are not equal
+  # assertIn(a, b) – check that a is in the item b
+  # assertNotIn(a, b) – check that a is not in the item b
+  # assertFalse(a) – check that the value of a is False
+  # assertTrue(a) – check the value of a is True
+  # assertIsInstance(a, TYPE) – check that a is of type “TYPE”
+  # assertRaises(ERROR, a, args) – check that when a is called with args that it raises ERROR
+

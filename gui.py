@@ -26,6 +26,72 @@ from collections import deque
 
 class DropDisplay(planes.Display):
 
+  def __init__(self):
+    planes.Display.__init__(self, (500,500))
+
+    self.grab = True
+    self.image.fill((100, 128, 0))
+
+    self.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+    #self.sub(DropZone("dropzone", pygame.Rect((100, 100), (200, 100)), draggable = True, grab = True))
+    #self.dropzone.image.fill((0, 0, 128))
+
+
+
+  def erase_screen(self):
+     drawing_surface = pygame.display.get_surface()
+     drawing_surface.fill((100,0,0))
+     pygame.display.flip()
+
+
+
+  def dropped_upon(self, plane, coordinates):
+
+    if isinstance(plane, ColorChangeSquare):
+
+      planes.Display.dropped_upon(self, plane, coordinates)
+
+      plane.moving = True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #planes.Display contain:
  
     #planes.Display(planes.Plane)
@@ -126,10 +192,6 @@ class DropDisplay(planes.Display):
 
 
 
-#   def erase_screen(self):
-#     drawing_surface = pygame.display.get_surface()
-#     drawing_surface.fill((100,0,0))
-#     pygame.display.flip()
 
     
 
@@ -190,96 +252,85 @@ class DropDisplay(planes.Display):
 #
 
 
-  # class ColorChangeSquare(planes.Plane):
+class ColorChangeSquare(planes.Plane):
 
-  #   def __init__(self, name, rect, draggable = False, grab = False):
+  def __init__(self, name, rect, draggable = False, grab = False):
 
-  #     planes.Plane.__init__(self, name, rect, draggable, grab)
+    planes.Plane.__init__(self, name, rect, draggable, grab)
 
-  #     # custom extensions for movement, color
-  #     #
-  #     self.moving = True
-  #     self.vector = (1, 0)
-  #     self.colors = deque([(255, 128, 0), (0, 255, 128), (0, 0, 255)])
+    # custom extensions for movement, color
+    #
+    self.moving = True
+    self.vector = (1, 0)
+    self.colors = deque([(255, 128, 0), (0, 255, 128), (0, 0, 255)])
 
-  #     self.image.fill(self.colors[0])
+    self.image.fill(self.colors[0])
 
-  #   def clicked(self, button_name):
-  #     self.colors.rotate(-1)
-  #     self.image.fill(self.colors[0])
+  def clicked(self, button_name):
+    self.colors.rotate(-1)
+    self.image.fill(self.colors[0])
 
-  #   def update(self):
+  def update(self):
 
-  #     if self.rect.top > (300 - self.rect.width - 25):
+    if self.rect.top > (300 - self.rect.width - 25):
 
-  #       self.rect.top = 300 - self.rect.width - 25
+      self.rect.top = 300 - self.rect.width - 25
 
-  #       # turn left
-  #       #
-  #       self.vector = (-1, 0)
+      # turn left
+      #
+      self.vector = (-1, 0)
 
-  #     if self.rect.left > (400 - self.rect.width - 25):
+    if self.rect.left > (400 - self.rect.width - 25):
 
-  #       self.rect.left = 400 - self.rect.width - 25
+      self.rect.left = 400 - self.rect.width - 25
 
-  #       # turn down
-  #       #
-  #       self.vector = (0, 1)
+      # turn down
+      #
+      self.vector = (0, 1)
 
-  #     if self.rect.top < 25:
+    if self.rect.top < 25:
 
-  #       self.rect.top = 25
+      self.rect.top = 25
 
-  #       # turn right
-  #       #
-  #       self.vector = (1, 0)
+      # turn right
+      #
+      self.vector = (1, 0)
 
-  #     if self.rect.left < 25:
+    if self.rect.left < 25:
 
-  #       self.rect.left = 25
+      self.rect.left = 25
 
-  #       # turn up
-  #       #
-  #       self.vector = (0, -1)
+      # turn up
+      #
+      self.vector = (0, -1)
 
-  #     if self.moving:
-  #       self.rect.move_ip(self.vector[0], self.vector[1])
+    if self.moving:
+      self.rect.move_ip(self.vector[0], self.vector[1])
 
-  # class DropZone(planes.Plane):
+class DropZone(planes.Plane):
 
-  #   def dropped_upon(self, plane, coordinates):
+  def dropped_upon(self, plane, coordinates):
 
-  #     planes.Plane.dropped_upon(self, plane, coordinates)
+    planes.Plane.dropped_upon(self, plane, coordinates)
 
-  #     plane.moving = True
+    plane.moving = True
 
-  #     plane.draggable  = True
-
-  # class DropDisplay(planes.Display):
-
-  #   def dropped_upon(self, plane, coordinates):
-
-  #     if isinstance(plane, ColorChangeSquare):
-
-  #       planes.Display.dropped_upon(self, plane, coordinates)
-
-  #       plane.moving = True
-
- 
+    plane.draggable  = True
 
 
-  # print("creating main screen")
-  # screen = DropDisplay((400, 300))
-  # screen.grab = True
-  # screen.image.fill((0, 128, 0))
 
 
-  # print("square setup")
-  # screen.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+# print("creating main screen")
+# screen = DropDisplay((400, 300))
+# screen.grab = True
+# screen.image.fill((0, 128, 0))
 
-  # # dropzone setup
-  # #
-  # print("drop zone setup")
-  # screen.sub(DropZone("dropzone", pygame.Rect((100, 100), (200, 100)), draggable = True, grab = True))
-  # screen.dropzone.image.fill((0, 0, 128))
 
+# print("square setup")
+# screen.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+
+# # dropzone setup
+# #
+# print("drop zone setup")
+# screen.sub(DropZone("dropzone", pygame.Rect((100, 100), (200, 100)), draggable = True, grab = True))
+# screen.dropzone.image.fill((0, 0, 128))

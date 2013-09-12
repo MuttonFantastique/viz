@@ -18,40 +18,91 @@ import time
 
 # brother/sister modules 
 from userinput import *
-from particles import *
+from gui import *
 
 # networking
 import socket
 
 #implicit import pycallgraph
 
+#use a "deck"...
+#from collections import deque
+
+
+
+
+#remove for production#
+sys.dont_write_bytecode = True
+
+
+
 #Still necessary?
 #TODO: setup.py
 sys.path.append('/home/blackpanther/Desktop/sdlHacking/working/')
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # zZz
 def main():
 
+  
 
+  
   #Major Classes
   EventControl = UserEvents()
-  #Gui_Env = GUI((400,400), fullscreen = False)
-  Gui_Env = GUI((0,0))
-  Gui_Env.grab = True
-  Gui_Env.image.fill((0,128,0))
 
 
 
-  #Variables
+
+  #single change dropdisplay to (0,0) and everything breaks
+  #check to see how the resolution tuple is used and what its breaking
+
+  screen = DropDisplay()
+  screen.image.fill((0,128,0))
 
 
-#
-# Connect to server
-#
+
+
+
+
+
+
+                                                # try:
+                                                #   pygame.init()
+                                                #   screen = ColorChangeSquare('root_screen', Rect(200,200,1000,1000))
+                                                  
+                                                #   print pygame.event.get() 
+                                                # except:
+                                                #   print 'problem starting screen'
+
+                                                #   # screen.grab = True
+                                               # screen.image.fill((0,128,0))
+
+
+
+ 
+
+#TODO
+#disabled try/except block due to the masking of unrelated exceptions...need to modify except to print all exceptions
+  #
+  # Connect to server
+  #
   try:
-     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-     
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   except socket.error, msg:
     print "Socket Error number: " + msg[0] + "\nError Message: " + msg[1]
     sys.exit()
@@ -60,81 +111,104 @@ def main():
 
   try:
     s.connect(('localhost', 9879))
+  except: 
+    print "exception raised trying to connect"
 
-      # try:
-      #   s.setblocking(0)
-      # except:
-      #   print "why?!"
+  # try:
+  #   s.setblocking(0)
+  # except:
+  #   print "why?!"
 
 
+  #Variables
+  message = ''
 
-    client = True
-    #Main Program Loop
-    while(client):
+  client = True
+  #Main Program Loop
+  while(client):
+        #print "got into the loop"
+
 
         #gets user input which returns a string signal for triggered events 
-        eventReturn = EventControl.pollingInput()
         
+        events = pygame.event.get()
+        #print "after pygame.event.get()"
+
+        #print events
+
+
+        if events:
+          message, event = EventControl.pollingInput(events)
+        
+       
     
-        if( eventReturn == 'quit'):
+        if( message == 'quit'):
           s.close()
           pygame.exit()
           sys.close()
 
-        elif( eventReturn == 'reload'):
+        elif( message == 'reload'):
             
-            from particles import *
-            Gui_Env = GUI((0,0))
-            Gui_Env.grab = True
-            Gui_Env.image.fill((0, 128, 0))
-          
+              from gui import *
+              screen = DropDisplay()        
           
 
-        elif eventReturn == 'erase':
-          Gui_Env.erase_screen() 
-
+        elif message == 'erase':
+          screen.erase_screen() 
 
 
         #TEMPLATE TO SEND COMMANDS TO SERVER
         #TODO:  
-        elif eventReturn == 'shutdown':
+        elif message == 'shutdown':
           s.send('shutdown')
 
 
 
-        elif eventReturn == 'sample':
+        elif message == 'sample':
             import pycallgraph
             pycallgraph.start_trace()
-
-              # TODO:
-              # import cProfile
-              # cProfile.run('foo()')
+                  #TODO: stop_trace()?
 
 
-        elif eventReturn == 'stopsample':
+                # TODO:
+                # import cProfile
+                # cProfile.run('foo()')
+
+
+        elif message == 'stopsample':
           pycallgraph.make_dot_graph('images/sample.png')
 
+        elif message == 'mouseevent':
+          screen.process(event)
 
-        Gui_Env.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
-        Gui_Env.update()
-        Gui_Env.render()
 
+
+
+
+
+        #print 'after event return'
+          # screen.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+         
+
+        #print "before screen update and render"
+        screen.update()
+        screen.render()
         pygame.display.flip()
-
+        #print "after displayflip()"
+      
   
 
         #these 3 functions do the heavy lifting of getting objects drawn on the screen
-        Gui_Env.update_SpeedandPosition()
-        Gui_Env.collision_detection()
-        Gui_Env.drawParticle()
+          # screen.update_SpeedandPosition()
+          # screen.collision_detection()
+          # screen.drawParticle()
 
 
 
         
 
 
-  except: #exits if no connection made
-    "exception raised trying to connect"
+  
 
 
 if __name__ == '__main__':
