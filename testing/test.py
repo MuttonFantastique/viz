@@ -1,4 +1,13 @@
 import unittest
+import sys
+
+
+
+sys.path.append('/home/blackpanther/Desktop/sdlHacking/working/')
+#print sys.path
+from client  import *
+from vizD import Child_Fork
+import gui 
 
 class Calculator(object):
  
@@ -9,13 +18,17 @@ class Calculator(object):
         return x+y
       else:
         raise ValueError
+
+
+
+
  
 class TDDInPythonExample(unittest.TestCase):
 
     calc = Calculator()
     
 
-    
+
     def test_calculator_add_method_returns_correct_result(self):
    
       result = self.calc.add(2,2)
@@ -31,6 +44,16 @@ class TDDInPythonExample(unittest.TestCase):
  
     def test_calculator_returns_error_message_if_x_arg_not_number(self):
       self.assertRaises(ValueError, self.calc.add, 2, 'three')
+
+
+
+class TDD_Server(unittest.TestCase):
+    #child = Child_Fork()
+
+    def test_just_experimenting(self):
+      self.assertEqual(child.MSG_LENGTH, 50)
+
+
 
 
 

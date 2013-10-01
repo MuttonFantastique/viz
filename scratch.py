@@ -40,7 +40,10 @@
 
 
 
+###########LOGGING##############
 
+#python <2.6
+#disable_existing_loggers=False
 
 
 
@@ -184,3 +187,159 @@
   # assertIsInstance(a, TYPE) – check that a is of type “TYPE”
   # assertRaises(ERROR, a, args) – check that when a is called with args that it raises ERROR
 
+# interesting Snippet
+# import code, traceback, signal
+
+# def debug(sig, frame):
+#     """Interrupt running process, and provide a python prompt for
+#     interactive debugging."""
+#     d={'_frame':frame}         # Allow access to frame object.
+#     d.update(frame.f_globals)  # Unless shadowed by global
+#     d.update(frame.f_locals)
+
+#     i = code.InteractiveConsole(d)
+#     message  = "Signal recieved : entering python shell.\nTraceback:\n"
+#     message += ''.join(traceback.format_stack(frame))
+#     i.interact(message)
+
+# def listen():
+#     signal.signal(signal.SIGUSR1, debug)  # Register handler
+
+#run in site.py so make it execute for every python process
+
+
+
+
+
+
+
+
+
+#use a "deck"...
+#from collections import deque
+
+
+
+
+ 
+  # try:
+  #   s.setblocking(0)
+  # except:
+  #   print "why?!"
+
+
+
+
+
+
+
+
+# try:
+#   pygame.init()
+#   screen = ColorChangeSquare('root_screen', Rect(200,200,1000,1000))
+  
+#   print pygame.event.get() 
+# except:
+#   print 'problem starting screen'
+
+#   # screen.grab = True
+# screen.image.fill((0,128,0))
+
+
+
+#print "after displayflip()"
+
+#logger.info('hey')
+
+
+
+
+
+#print 'after event return'
+# screen.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+
+#these 3 functions do the heavy lifting of getting objects drawn on the screen
+# screen.update_SpeedandPosition()
+# screen.collision_detection()
+# screen.drawParticle()
+
+
+
+#
+#
+#  
+#EXAMPLE CODE
+#
+#
+#
+
+
+
+# print("creating main screen")
+# screen = DropDisplay((400, 300))
+# screen.grab = True
+# screen.image.fill((0, 128, 0))
+
+
+# print("square setup")
+# screen.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+
+# # dropzone setup
+# #
+# print("drop zone setup")
+# screen.sub(DropZone("dropzone", pygame.Rect((100, 100), (200, 100)), draggable = True, grab = True))
+# screen.dropzone.image.fill((0, 0, 128))
+
+
+
+
+
+
+#GITHUB COMMANDS
+
+#Create a new repository on the command line
+
+# touch README.md
+# git init
+# git add README.md
+# git commit -m "first commit"
+# git remote add origin https://github.com/TInkeringEngr/dru.git
+# git push -u origin master
+# Push an existing repository from the command line
+
+# git remote add origin https://github.com/TInkeringEngr/dru.git
+# git push -u origin master
+
+
+
+#A thing of beauty      
+
+# foo1 = "Hello world"
+# foo2 = "bar"
+# foo3 = {"1":"a",
+#         "2":"b"}
+# foo4 = "1+1"
+
+# for name in dir():
+#     myvalue = eval(name)
+#     print name, "is", type(name), "and is equal to ", myvalue
+
+
+# Better:
+
+# foo1 = "Hello world"
+# foo2 = "bar"
+# foo3 = {"1":"a", "2":"b"}
+# foo4 = "1+1"
+
+# import pprint
+# pprint.pprint(locals())
+
+# {'__builtins__': <module '__builtin__' (built-in)>,
+#  '__doc__': None,
+#  '__name__': '__main__',
+#  'foo1': 'Hello world',
+#  'foo2': 'bar',
+#  'foo3': {'1': 'a', '2': 'b'},
+#  'foo4': '1+1',
+#  'pprint': <module 'pprint' from '/usr/lib/python2.5/pprint.pyc'>}

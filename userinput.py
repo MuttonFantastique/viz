@@ -2,11 +2,26 @@ import pygame
 from pygame.locals import *
 import gui
 
-
+import logging
 import sys
 
 #remove for production#
 sys.dont_write_bytecode = True
+
+logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+
+
+
+
+
+import logging
+import logging.config
+logging.basicConfig(filename='log/client.log', filemode='w', level=logging.CRITICAL)
+
+logger = logging.getLogger(__name__)
+logger.info('logging from userinput.py')
+
+
 
 class UserEvents:
 
@@ -34,7 +49,7 @@ class UserEvents:
                           if(event.key == K_ESCAPE):
                             pygame.exit(); sys.exit()
 
-                          elif(event.key == K_i):
+                          elif(event.key == K_r):
                             try:
                               reload(gui)
                               print "Success! reloaded particles!"
@@ -70,12 +85,22 @@ class UserEvents:
                             return message , event
 
                           elif(event.key == K_x):
-                            message = 'stopsample'
+                            message = 'stop_sample'
                             event = ''
                             return message , event
 
-                          elif(event.type == pygame.KEYUP):
-                            pass
+                          elif(event.key == K_PERIOD):
+                            message = 'turn_on_logging'
+                            event = ''
+                            return message, event
+
+                          elif(event.key == K_SLASH):
+                            message = 'turn_off_logging'
+                            event = ''
+                            return message, event
+
+              elif(event.type == pygame.KEYUP):
+                pass
 
               elif (event.type == pygame.MOUSEBUTTONDOWN ) or (event.type == pygame.MOUSEBUTTONUP):
                 message = 'mouseevent'
@@ -102,6 +127,15 @@ class UserEvents:
 
             #        display.process() accepts an eventlist...Sweet!....we tried passing this
             #        to the Display instance, but it wasn't globally recognized between modules...
+
+
+            #        Did I fix this when I hacked Planes so that process was only called on the particular event instead of 
+            #        iterating over the entire event twice...yes it appears
+
+
+            #        What was my design decision for creating a seperate module and class for iterating over events?
+            #        The module makes litte difference and the class was setup because I thought I would be decorating events
+            #        I might want to merge with main and only keep the function
 
     
 

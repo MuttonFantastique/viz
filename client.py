@@ -23,30 +23,28 @@ from gui import *
 # networking
 import socket
 
-#implicit import pycallgraph
-
-#use a "deck"...
-#from collections import deque
 
 
+# Start debug logging with . and stop with /
+# Erase log and screen with e
+import logging
+import logging.config
 
 
+#Explicit import pycallgraph
+
+
+
+
+#TODO: Whats this again?
 #remove for production#
 sys.dont_write_bytecode = True
 
 
 
-#Still necessary?
+#hardcoded
 #TODO: setup.py
 sys.path.append('/home/blackpanther/Desktop/sdlHacking/working/')
-
-
-
-
-
-
-
-
 
 
 
@@ -59,6 +57,9 @@ sys.path.append('/home/blackpanther/Desktop/sdlHacking/working/')
 # zZz
 def main():
 
+
+  
+
   
 
   
@@ -66,45 +67,24 @@ def main():
   EventControl = UserEvents()
 
 
-
-
-  #single change dropdisplay to (0,0) and everything breaks
-  #check to see how the resolution tuple is used and what its breaking
+  #TODO:use gitbucket issue tracker
+  #BUG:
+  #single change of Dropdisplay to (0,0) and everything breaks
+  #check to see how the resolution tuple is used in Planes and find what is breaking it
 
   screen = DropDisplay()
-  screen.image.fill((0,128,0))
-
-
-
-
-
-
-
-
-                                                # try:
-                                                #   pygame.init()
-                                                #   screen = ColorChangeSquare('root_screen', Rect(200,200,1000,1000))
-                                                  
-                                                #   print pygame.event.get() 
-                                                # except:
-                                                #   print 'problem starting screen'
-
-                                                #   # screen.grab = True
-                                               # screen.image.fill((0,128,0))
-
-
 
  
 
-#TODO
-#disabled try/except block due to the masking of unrelated exceptions...need to modify except to print all exceptions
+  #TODO:
+  #disabled try/except block due to the masking of errors...
   #
   # Connect to server
   #
   try:
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   except socket.error, msg:
-    print "Socket Error number: " + msg[0] + "\nError Message: " + msg[1]
+    print "Socket Error number: " + msg[0] + "\nError signal: " + msg[1]
     sys.exit()
 
 
@@ -114,104 +94,106 @@ def main():
   except: 
     print "exception raised trying to connect"
 
-  # try:
-  #   s.setblocking(0)
-  # except:
-  #   print "why?!"
+
+
+
+
+
+
+
 
 
   #Variables
-  message = ''
+  signal = ''
 
   client = True
   #Main Program Loop
   while(client):
-        #print "got into the loop"
 
-
-        #gets user input which returns a string signal for triggered events 
-        
+              
         events = pygame.event.get()
-        #print "after pygame.event.get()"
-
-        #print events
-
-
         if events:
-          message, event = EventControl.pollingInput(events)
+
+          #returns a signal and event for triggered events 
+          signal, event = EventControl.pollingInput(events)
         
-       
-    
-        if( message == 'quit'):
-          s.close()
-          pygame.exit()
-          sys.close()
+        if signal:
+              if( signal == 'quit'):
+                s.close()
+                pygame.exit()
+                sys.close()
 
-        elif( message == 'reload'):
-            
-              from gui import *
-              screen = DropDisplay()        
-          
+              elif( signal == 'reload'):
+                  
+                    from gui import *
+                    screen = DropDisplay()        
+                
 
-        elif message == 'erase':
-          screen.erase_screen() 
+              elif signal == 'erase':
+                screen.erase_screen()
 
-
-        #TEMPLATE TO SEND COMMANDS TO SERVER
-        #TODO:  
-        elif message == 'shutdown':
-          s.send('shutdown')
-
+                #TODO: fix hard coding...error hiding is the devil
+                try:
+                  os.remove('/home/blackpanther/Desktop/sdlHacking/working/log/client.log')
+                except:
+                  pass
 
 
-        elif message == 'sample':
-            import pycallgraph
-            pycallgraph.start_trace()
-                  #TODO: stop_trace()?
-
-
-                # TODO:
-                # import cProfile
-                # cProfile.run('foo()')
-
-
-        elif message == 'stopsample':
-          pycallgraph.make_dot_graph('images/sample.png')
-
-        elif message == 'mouseevent':
-          screen.process(event)
+              #TEMPLATE TO SEND COMMANDS TO SERVER
+              #TODO:  
+              elif signal == 'shutdown':
+                s.send('shutdown')
 
 
 
+              elif signal == 'sample':
+                  import pycallgraph
+                  pycallgraph.start_trace()
+                  # TODO:
+                  # import cProfile
+                  # cProfile.run('foo()')
+
+
+              elif signal == 'stop_sample':
+                pycallgraph.make_dot_graph('images/sample.png')
+                #TODO: check to see if you need to stop pycallgraph.start_trace()
+
+              elif signal == 'mouseevent':
+                screen.process(event)
+
+
+              elif signal == 'turn_on_logging':
+                logging.basicConfig(filename='log/client.log', filemode='w', level=logging.DEBUG)
+                
+
+              elif signal == 'turn_off_logging':
+                logger.setLevel(logging.CRITICAL)
+
+
+        #reset signal
+        if not signal == '':
+          signal == '' 
+                                  
 
 
 
-        #print 'after event return'
-          # screen.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
-         
-
-        #print "before screen update and render"
+        #BUG/TODO: Their is a call to render twice....maybe because I call pygame.display.flip more than once?
         screen.update()
         screen.render()
         pygame.display.flip()
-        #print "after displayflip()"
-      
-  
-
-        #these 3 functions do the heavy lifting of getting objects drawn on the screen
-          # screen.update_SpeedandPosition()
-          # screen.collision_detection()
-          # screen.drawParticle()
 
 
 
-        
-
-
-  
 
 
 if __name__ == '__main__':
+  
+
+  #Setup __main__ logger
+  logger = logging.getLogger(__name__)  
+  logger.info("logging from client.py")
+
+    
   main()
 
 

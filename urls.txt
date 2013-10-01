@@ -1,0 +1,17 @@
+Useful URLS
+
+
+Debugging: 
+https://wiki.python.org/moin/PythonDebuggingTools
+
+  try:WinPDB
+
+Logging:
+http://docs.python.org/2/library/logging.html#module-logging
+
+
+python Server lib: (?...look into this)
+http://twistedmatrix.com/trac/
+
+
+Crypto:
