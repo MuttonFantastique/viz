@@ -1,49 +1,44 @@
 import sys
-
-
 import pygame
   # from pygame.color import THECOLORS
   # from pygame import Rect
   # from pygame.locals import *
-
-
 import planes
   # from planes import Display
   # from planes.gui import Label, OutlinedText, Container
-
-
+import logging
+import logging.config
+from collections import deque #pronounced deck and its a double ended que
 
 #remove for production#
 sys.dont_write_bytecode = True
 
-
-
-import logging
-import logging.config
 logging.basicConfig(filename='log/client.log', filemode='w', level=logging.CRITICAL)
 
 logger = logging.getLogger(__name__)
 logger.info('Logging from GUI.py')
 
 
-#pronounced deck and its a double ended que
-from collections import deque
 
+#nate made variables here
+winHight = 500 #defines the hight and width in pixels
+winWidth = 600
+padding = 10# defines the empty space within the window to not be used
+#end of nates variables 
 
 
 class DropDisplay(planes.Display):
 
   def __init__(self):
-    planes.Display.__init__(self, (1280,1024))
-
+    planes.Display.__init__(self, (winWidth,winHight))
     self.grab = True
 
+    #to change the background of the window edit this block currently bg.png is non-essential
+    #imgPos = pygame.Rect((0, 0), (0, 0))
+    #bg = pygame.image.load('images/bg.png')
+    #self.image.blit(bg, imgPos )
 
-    imgPos = pygame.Rect((0, 0), (0, 0))
-    bg = pygame.image.load('images/bg.png')
-    self.image.blit(bg, imgPos )
-
-    self.sub(ColorChangeSquare("square", pygame.Rect((25, 25), (50, 50)), draggable = True))
+    self.sub(ColorChangeSquare("square", pygame.Rect((padding, padding), (50, 50)), draggable = True))
     #self.sub(DropZone("dropzone", pygame.Rect((100, 100), (200, 100)), draggable = True, grab = True))
     #self.dropzone.image.fill((0, 0, 128))
 
@@ -59,13 +54,8 @@ class DropDisplay(planes.Display):
   def dropped_upon(self, plane, coordinates):
 
     if isinstance(plane, ColorChangeSquare):
-
       planes.Display.dropped_upon(self, plane, coordinates)
-
       plane.moving = True
-
-
-
 
 
 class ColorChangeSquare(planes.Plane):
@@ -86,39 +76,26 @@ class ColorChangeSquare(planes.Plane):
     self.colors.rotate(-1)
     self.image.fill(self.colors[0])
 
+#nate messed with this function. Made it so that the space between the box and the edge of the window can be modified with one change
+#changed the conditions from a set value to a variable determined above, this allows for easier window resize. 
+#NOTE: if the window is resized the variables stay the same and the behavior of the box stays the same. 
   def update(self):
 
-    if self.rect.top > (300 - self.rect.width - 25):
+    if self.rect.top > (winHight - self.rect.width - padding):#if the box attempts to go off of the bottom 
+      self.rect.top = winHight - self.rect.width - padding
+      self.vector = (-1, 0)# turn left
 
-      self.rect.top = 300 - self.rect.width - 25
+    if self.rect.left > (winWidth - self.rect.width - padding):#if the box attempts to go off the right
+      self.rect.left = winWidth - self.rect.width - padding
+      self.vector = (0, 1)# turn down
 
-      # turn left
-      #
-      self.vector = (-1, 0)
+    if self.rect.top < padding:#if the box attempts to go off the top
+      self.rect.top = padding
+      self.vector = (1, 0) # turn right
 
-    if self.rect.left > (400 - self.rect.width - 25):
-
-      self.rect.left = 400 - self.rect.width - 25
-
-      # turn down
-      #
-      self.vector = (0, 1)
-
-    if self.rect.top < 25:
-
-      self.rect.top = 25
-
-      # turn right
-      #
-      self.vector = (1, 0)
-
-    if self.rect.left < 25:
-
-      self.rect.left = 25
-
-      # turn up
-      #
-      self.vector = (0, -1)
+    if self.rect.left < padding:#if the box attempts to go off the left
+      self.rect.left = padding
+      self.vector = (0, -1) # turn up
 
     if self.moving:
       self.rect.move_ip(self.vector[0], self.vector[1])
@@ -135,7 +112,7 @@ class DropZone(planes.Plane):
 
 
 
-
+#### END OF THE FILE. THE FOLLOWING CODE WAS NOT WHAT THE ORDER DESIRES.
 
 
 
@@ -214,14 +191,3 @@ class DropZone(planes.Plane):
 #   #draws the particles on the screen
 #   def drawParticle(self):
 #       pass
-
-
-
-
-
-
-
-
-
-
-
